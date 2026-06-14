@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+
+  identity-service:
+    build: ./backend/identity-service
+    container_name: njangitrack_identity
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://neondb_owner:npg_4LAh5GdauNYl@ep-raspy-frog-aq3cm52b.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - JWT_SECRET=njangitrack_super_secret_jwt_key_2026
+      - JWT_EXPIRES_IN=24h
+    restart: unless-stopped
+
+  ledger-service:
+    build: ./backend/ledger-service
+    container_name: njangitrack_ledger
+    ports:
+      - "3002:3002"
+    environment:
+      - DATABASE_URL=postgresql://neondb_owner:npg_4LAh5GdauNYl@ep-raspy-frog-aq3cm52b.c-8.us-east-1.aws.neon.tech/neondb?schema=ledger&sslmode=require
+      - PORT=3002
+    restart: unless-stopped
+
+  fine-service:
+    build: ./backend/fine-service
+    container_name: njangitrack_fine
+    ports:
+      - "3003:3003"
+    environment:
+      - DATABASE_URL=postgresql://neondb_owner:npg_4LAh5GdauNYl@ep-raspy-frog-aq3cm52b.c-8.us-east-1.aws.neon.tech/neondb?schema=fines&sslmode=require
+      - PORT=3003
+    restart: unless-stopped
+
+  loan-service:
+    build: ./backend/loan-service
+    container_name: njangitrack_loan
+    ports:
+      - "3004:3004"
+    environment:
+      - DATABASE_URL=postgresql://neondb_owner:npg_4LAh5GdauNYl@ep-raspy-frog-aq3cm52b.c-8.us-east-1.aws.neon.tech/neondb?schema=loans&sslmode=require
+      - PORT=3004
+    restart: unless-stopped
+
+  notification-service:
+    build: ./backend/notification-service
+    container_name: njangitrack_notification
+    ports:
+      - "3005:3005"
+    environment:
+      - DATABASE_URL=postgresql://neondb_owner:npg_4LAh5GdauNYl@ep-raspy-frog-aq3cm52b.c-8.us-east-1.aws.neon.tech/neondb?schema=notifications&sslmode=require
+      - PORT=3005
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: njangitrack_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - identity-service
+      - ledger-service
+      - fine-service
+      - loan-service
+      - notification-service
+    restart: unless-stopped
