@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd backend/identity-service && npm install && npm run build"
+
+[deploy]
+startCommand = "cd backend/identity-service && npm run start:prod"
+restartPolicyType = "on_failure"
