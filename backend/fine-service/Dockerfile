@@ -1,4 +1,3 @@
-cat > backend/fine-service/Dockerfile << 'EOF'
 FROM node:20-alpine
 
 WORKDIR /app
