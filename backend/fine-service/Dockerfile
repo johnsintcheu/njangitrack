@@ -1,9 +1,11 @@
+cat > backend/fine-service/Dockerfile << 'EOF'
 FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-COPY node_modules ./node_modules
+RUN npm install
+
 COPY . .
 
 RUN npx nest build
@@ -11,3 +13,4 @@ RUN npx nest build
 EXPOSE 3003
 
 CMD ["node", "dist/main.js"]
+EOF
