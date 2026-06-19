@@ -12,4 +12,3 @@ RUN npx nest build
 EXPOSE 3003
 
 CMD ["node", "dist/main.js"]
-EOF
