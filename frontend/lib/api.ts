@@ -34,10 +34,10 @@ const createApi = (baseURL: string) => {
   return api
 }
 
-export const identityApi = createApi('http://localhost:3001')
-export const ledgerApi = createApi('http://localhost:3002')
-export const fineApi = createApi('http://localhost:3003')
-export const loanApi = createApi('http://localhost:3004')
-export const notificationApi = createApi('http://localhost:3005')
+export const identityApi = createApi('https://identity-service-xtv7.onrender.com')
+export const ledgerApi = createApi('https://ledger-service-jdcq.onrender.com')
+export const fineApi = createApi('https://fine-service.onrender.com')
+export const loanApi = createApi('https://loan-service-1bhi.onrender.com')
+export const notificationApi = createApi('https://notification-service-521i.onrender.com')
 
 export default identityApi
