@@ -59,8 +59,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg w-full max-w-md p-8">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -68,11 +68,11 @@ export default function LoginPage() {
             <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">N</span>
             </div>
-            <span className="font-bold text-gray-800">NjangiTrack</span>
+            <span className="font-bold text-gray-800 dark:text-gray-100">NjangiTrack</span>
           </div>
           <button
             onClick={() => setLanguage(language === 'EN' ? 'FR' : 'EN')}
-            className="text-sm text-gray-600 border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-50"
+            className="text-sm text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-full px-3 py-1 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             🌐 {language === 'EN' ? 'FR/EN' : 'EN/FR'}
           </button>
@@ -80,10 +80,10 @@ export default function LoginPage() {
 
         {/* Title */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             {language === 'EN' ? 'Welcome Back' : 'Bon Retour'}
           </h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             {language === 'EN'
               ? 'Manage your community savings with confidence.'
               : 'Gérez vos tontines en toute confiance.'}
@@ -100,11 +100,11 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2 tracking-wider">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 tracking-wider">
               PHONE NUMBER / TÉLÉPHONE
             </label>
-            <div className="flex border border-gray-300 rounded-lg overflow-hidden focus-within:border-green-500">
-              <span className="bg-gray-50 px-3 py-3 text-gray-600 text-sm border-r border-gray-300">
+            <div className="flex border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden focus-within:border-green-500">
+              <span className="bg-gray-50 dark:bg-gray-800 px-3 py-3 text-gray-600 dark:text-gray-300 text-sm border-r border-gray-300 dark:border-gray-700">
                 +237
               </span>
               <input
@@ -121,7 +121,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2 tracking-wider">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 tracking-wider">
               PASSWORD / MOT DE PASSE
             </label>
             <input
@@ -131,7 +131,7 @@ export default function LoginPage() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
               required
             />
           </div>
@@ -145,7 +145,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           {language === 'EN' ? 'New to NjangiTrack?' : 'Nouveau sur NjangiTrack?'}{' '}
           <Link href="/register" className="text-green-600 font-semibold hover:underline">
             {language === 'EN' ? 'Create Account' : 'Créer un compte'}

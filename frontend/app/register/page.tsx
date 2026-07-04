@@ -14,6 +14,7 @@ export default function RegisterPage() {
     password: '',
     quartier: '',
     language: 'EN',
+    role: 'MEMBER' as 'MEMBER' | 'TREASURER' | 'GROUP_ADMIN',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -33,6 +34,7 @@ export default function RegisterPage() {
         password: formData.password,
         quartier: formData.quartier,
         language: language,
+        role: formData.role,
       })
 
       setSuccess('Account created successfully! Redirecting to login...')
@@ -48,8 +50,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg w-full max-w-md p-8">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -57,20 +59,20 @@ export default function RegisterPage() {
             <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">N</span>
             </div>
-            <span className="font-bold text-gray-800">NjangiTrack</span>
+            <span className="font-bold text-gray-800 dark:text-gray-100">NjangiTrack</span>
           </div>
           <button
             onClick={() => setLanguage(language === 'EN' ? 'FR' : 'EN')}
-            className="text-sm text-gray-600 border border-gray-300 rounded-full px-3 py-1"
+            className="text-sm text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-full px-3 py-1"
           >
             🌐 {language === 'EN' ? 'FR/EN' : 'EN/FR'}
           </button>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
           {language === 'EN' ? 'Create Account' : 'Créer un compte'}
         </h1>
-        <p className="text-gray-500 text-sm mb-6">
+        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
           {language === 'EN'
             ? 'Join your local Njangi community'
             : 'Rejoignez votre communauté Njangi'}
@@ -90,7 +92,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
               FULL NAME / NOM COMPLET
             </label>
             <input
@@ -100,13 +102,13 @@ export default function RegisterPage() {
               onChange={(e) =>
                 setFormData({ ...formData, fullName: e.target.value })
               }
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
               EMAIL
             </label>
             <input
@@ -116,16 +118,16 @@ export default function RegisterPage() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
               PHONE NUMBER / TÉLÉPHONE
             </label>
-            <div className="flex border border-gray-300 rounded-lg overflow-hidden focus-within:border-green-500">
-              <span className="bg-gray-50 px-3 py-3 text-gray-600 text-sm border-r border-gray-300">
+            <div className="flex border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden focus-within:border-green-500">
+              <span className="bg-gray-50 dark:bg-gray-800 px-3 py-3 text-gray-600 dark:text-gray-300 text-sm border-r border-gray-300 dark:border-gray-700">
                 +237
               </span>
               <input
@@ -142,7 +144,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
               QUARTIER / NEIGHBORHOOD
             </label>
             <input
@@ -152,12 +154,58 @@ export default function RegisterPage() {
               onChange={(e) =>
                 setFormData({ ...formData, quartier: e.target.value })
               }
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+              {language === 'EN' ? 'I AM JOINING AS / ROLE' : 'JE REJOINS EN TANT QUE'}
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {[
+                {
+                  value: 'MEMBER' as const,
+                  label: language === 'EN' ? 'Member' : 'Membre',
+                  hint: language === 'EN' ? 'Contribute & vote' : 'Cotiser & voter',
+                },
+                {
+                  value: 'TREASURER' as const,
+                  label: language === 'EN' ? 'Treasurer' : 'Trésorier(ère)',
+                  hint: language === 'EN' ? 'Verify payments' : 'Vérifier les paiements',
+                },
+                {
+                  value: 'GROUP_ADMIN' as const,
+                  label: language === 'EN' ? 'Group Admin' : 'Admin de groupe',
+                  hint: language === 'EN' ? 'Create & manage group' : 'Créer & gérer le groupe',
+                },
+              ].map((r) => (
+                <button
+                  key={r.value}
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: r.value })}
+                  className={`text-left px-3 py-3 rounded-lg text-xs border-2 transition-colors ${
+                    formData.role === r.value
+                      ? 'border-green-600 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                      : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300'
+                  }`}
+                >
+                  <span className="block font-semibold">{r.label}</span>
+                  <span className="block text-[11px] opacity-75">{r.hint}</span>
+                </button>
+              ))}
+            </div>
+            {formData.role === 'GROUP_ADMIN' && (
+              <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                {language === 'EN'
+                  ? "You'll be able to create your Njangi group right after signing in."
+                  : 'Vous pourrez créer votre groupe Njangi juste après connexion.'}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
               PASSWORD / MOT DE PASSE
             </label>
             <input
@@ -167,7 +215,7 @@ export default function RegisterPage() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+              className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
               required
             />
           </div>
@@ -185,7 +233,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           {language === 'EN'
             ? 'Already have an account?'
             : 'Vous avez déjà un compte?'}{' '}

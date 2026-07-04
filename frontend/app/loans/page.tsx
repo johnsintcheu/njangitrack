@@ -76,15 +76,15 @@ export default function LoansPage() {
     .reduce((sum, l) => sum + Number(l.outstandingBalanceXAF), 0)
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 dark:bg-gray-950">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
 
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Social Fund & Loans</h1>
-            <p className="text-gray-500">Interest Rate: 8% per month</p>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Social Fund & Loans</h1>
+            <p className="text-gray-500 dark:text-gray-400">Interest Rate: 8% per month</p>
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
@@ -95,21 +95,21 @@ export default function LoansPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-green-600">
-            <p className="text-gray-500 text-sm">Active Loans</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border-l-4 border-green-600">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Active Loans</p>
             <p className="text-2xl font-bold text-green-700">
               {loans.filter(l => l.status === 'ACTIVE').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-600">
-            <p className="text-gray-500 text-sm">Repaid Loans</p>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border-l-4 border-blue-600">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Repaid Loans</p>
             <p className="text-2xl font-bold text-blue-700">
               {loans.filter(l => l.status === 'REPAID').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-orange-600">
-            <p className="text-gray-500 text-sm">Total Outstanding</p>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border-l-4 border-orange-600">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Total Outstanding</p>
             <p className="text-2xl font-bold text-orange-700">
               {totalOutstanding.toLocaleString()} XAF
             </p>
@@ -125,8 +125,8 @@ export default function LoansPage() {
 
         {/* Loan Request Form */}
         {showForm && (
-          <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Request Emergency Loan</h2>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm mb-6">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Request Emergency Loan</h2>
 
             <div className="bg-blue-50 rounded-lg p-4 mb-4">
               <p className="text-blue-700 text-sm font-medium">Community Voting Required</p>
@@ -137,7 +137,7 @@ export default function LoansPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   LOAN AMOUNT (XAF)
                 </label>
                 <input
@@ -145,11 +145,11 @@ export default function LoansPage() {
                   placeholder="e.g. 50000"
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                   required
                 />
                 {formData.amount && (
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Total repayment (3 months):{' '}
                     <span className="font-bold text-green-700">
                       {(parseFloat(formData.amount) * 1.08 * 3).toLocaleString()} XAF
@@ -159,13 +159,13 @@ export default function LoansPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   REPAYMENT PERIOD
                 </label>
                 <select
                   value={formData.repaymentPeriod}
                   onChange={(e) => setFormData({ ...formData, repaymentPeriod: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 >
                   <option value="1">1 month</option>
                   <option value="2">2 months</option>
@@ -175,7 +175,7 @@ export default function LoansPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   REASON FOR LOAN
                 </label>
                 <div className="flex gap-2 mb-2">
@@ -187,7 +187,7 @@ export default function LoansPage() {
                       className={`px-3 py-1 rounded-full text-xs border ${
                         formData.reason === r
                           ? 'bg-green-600 text-white border-green-600'
-                          : 'border-gray-300 text-gray-600'
+                          : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300'
                       }`}
                     >
                       {r}
@@ -198,7 +198,7 @@ export default function LoansPage() {
                   placeholder="Describe your emergency..."
                   value={formData.reason}
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                   rows={3}
                   required
                 />
@@ -215,7 +215,7 @@ export default function LoansPage() {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 border border-gray-300 text-gray-600 py-3 rounded-lg"
+                  className="flex-1 border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-3 rounded-lg"
                 >
                   Cancel
                 </button>
@@ -225,41 +225,41 @@ export default function LoansPage() {
         )}
 
         {/* Loans Table */}
-        <div className="bg-white rounded-xl shadow-sm">
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-lg font-bold text-gray-800">All Loans</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm">
+          <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">All Loans</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">BORROWER ID</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">PRINCIPAL</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">INTEREST</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">OUTSTANDING</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">DISBURSED</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">STATUS</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">BORROWER ID</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">PRINCIPAL</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">INTEREST</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">OUTSTANDING</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">DISBURSED</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">STATUS</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {loans.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-gray-400">
+                    <td colSpan={6} className="p-8 text-center text-gray-400 dark:text-gray-500">
                       No loans yet. Click &quot;+ Request Loan&quot; to request one.
                     </td>
                   </tr>
                 ) : (
                   loans.map((loan) => (
-                    <tr key={loan.id} className="hover:bg-gray-50">
-                      <td className="p-4 text-sm text-gray-600">{loan.borrowerId.slice(0, 8)}...</td>
-                      <td className="p-4 text-sm text-gray-600">
+                    <tr key={loan.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">{loan.borrowerId.slice(0, 8)}...</td>
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">
                         {Number(loan.principalXAF).toLocaleString()} XAF
                       </td>
-                      <td className="p-4 text-sm text-gray-600">{loan.monthlyInterestRate}%/month</td>
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">{loan.monthlyInterestRate}%/month</td>
                       <td className="p-4 text-sm font-medium text-orange-600">
                         {Number(loan.outstandingBalanceXAF).toLocaleString()} XAF
                       </td>
-                      <td className="p-4 text-sm text-gray-600">
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">
                         {new Date(loan.disbursedAt).toLocaleDateString()}
                       </td>
                       <td className="p-4">

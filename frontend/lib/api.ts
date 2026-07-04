@@ -40,4 +40,18 @@ export const fineApi = createApi('https://fine-service.onrender.com')
 export const loanApi = createApi('https://loan-service-1bhi.onrender.com')
 export const notificationApi = createApi('https://notification-service-521i.onrender.com')
 
+// Reports (cycle summary reports) are stored by the Ledger service.
+// Requires a `ReportsModule` on the backend — see BACKEND_TODO.md.
+export const reportsApi = ledgerApi
+
+// Each microservice is expected to expose GET /agents/status returning
+// AgentStatus[] for the CronJobs it hosts — see BACKEND_TODO.md.
+export const agentServices = [
+  { name: 'Identity Service', api: identityApi },
+  { name: 'Ledger Service', api: ledgerApi },
+  { name: 'Fine Service', api: fineApi },
+  { name: 'Loan Service', api: loanApi },
+  { name: 'Notification Service', api: notificationApi },
+]
+
 export default identityApi

@@ -72,9 +72,57 @@ export interface RegisterData {
   password: string
   language: 'FR' | 'EN'
   quartier: string
+  role: 'MEMBER' | 'TREASURER' | 'GROUP_ADMIN'
 }
 
 export interface AuthResponse {
   token: string
   user: User
+}
+
+export interface SessionReport {
+  id: string
+  groupId: string
+  title: string
+  cycleId?: string
+  meetingDate: string
+  authorId: string
+  authorName: string
+  summary: string
+  contributionsTotalXAF: number
+  finesTotalXAF: number
+  socialFundBalanceXAF: number
+  beneficiaryName: string
+  attendeesCount: number
+  decisions: string
+  createdAt: string
+}
+
+export interface AgentStatus {
+  agentName: string
+  service: string
+  schedule: string
+  lastRunAt: string | null
+  lastRunDurationMs: number | null
+  lastRunRecordsProcessed: number | null
+  status: 'HEALTHY' | 'STALE' | 'ERROR' | 'UNKNOWN'
+}
+
+export interface Notification {
+  id: string
+  memberId: string
+  type: 'CONTRIBUTION' | 'REMINDER' | 'FINE' | 'LOAN' | 'PAYOUT' | 'GENERAL'
+  message: string
+  channel: string
+  status: 'DELIVERED' | 'FAILED' | 'PENDING'
+  createdAt: string
+}
+
+export interface Member {
+  id: string
+  fullName: string
+  phoneNumber: string
+  quartier?: string
+  role: 'MEMBER' | 'TREASURER' | 'GROUP_ADMIN' | 'SUPER_ADMIN'
+  createdAt: string
 }

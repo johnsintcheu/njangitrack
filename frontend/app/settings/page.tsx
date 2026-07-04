@@ -34,14 +34,14 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 dark:bg-gray-950">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">Settings</h1>
-          <p className="text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Settings</h1>
+          <p className="text-gray-500 dark:text-gray-400">
             Configure your Njangi group settings
           </p>
         </div>
@@ -56,13 +56,13 @@ export default function SettingsPage() {
         <form onSubmit={handleSave} className="space-y-6">
 
           {/* Group Settings */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
               Group Configuration
             </h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   GROUP NAME
                 </label>
                 <input
@@ -71,11 +71,11 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, groupName: e.target.value })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   MAX MEMBERS
                 </label>
                 <input
@@ -84,11 +84,11 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, maxMembers: e.target.value })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   CONTRIBUTION AMOUNT (XAF)
                 </label>
                 <input
@@ -100,11 +100,11 @@ export default function SettingsPage() {
                       contributionAmount: e.target.value,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   SOCIAL FUND AMOUNT (XAF)
                 </label>
                 <input
@@ -116,20 +116,20 @@ export default function SettingsPage() {
                       socialFundAmount: e.target.value,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Fine Settings */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
               Fine Rules
             </h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   LATE FINE (XAF)
                 </label>
                 <input
@@ -138,14 +138,14 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, lateFine: e.target.value })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                   Applied automatically at deadline
                 </p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   ABSENCE FINE (XAF)
                 </label>
                 <input
@@ -154,14 +154,14 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, absenceFine: e.target.value })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                   Applied for unexcused absence
                 </p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   LOAN INTEREST RATE (%/month)
                 </label>
                 <input
@@ -170,11 +170,11 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, interestRate: e.target.value })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   LANGUAGE
                 </label>
                 <select
@@ -182,7 +182,7 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, language: e.target.value })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 >
                   <option value="EN">English</option>
                   <option value="FR">Français</option>
@@ -192,17 +192,17 @@ export default function SettingsPage() {
           </div>
 
           {/* Notification Settings */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
               Notifications
             </h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-800 text-sm">
+                  <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">
                     Push Notifications
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     Receive in-app alerts
                   </p>
                 </div>
@@ -227,10 +227,10 @@ export default function SettingsPage() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-800 text-sm">
+                  <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">
                     SMS Alerts
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     Receive SMS via Africa{`'`}s Talking
                   </p>
                 </div>
@@ -257,37 +257,37 @@ export default function SettingsPage() {
           </div>
 
           {/* Profile */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
               My Profile
             </h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   FULL NAME
                 </label>
                 <input
                   type="text"
                   defaultValue={user?.fullName}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   EMAIL
                 </label>
                 <input
                   type="email"
                   defaultValue={user?.email}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   PHONE NUMBER
                 </label>
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-                  <span className="bg-gray-50 px-3 py-3 text-gray-600 text-sm border-r">
+                <div className="flex border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+                  <span className="bg-gray-50 dark:bg-gray-800 px-3 py-3 text-gray-600 dark:text-gray-300 text-sm border-r">
                     +237
                   </span>
                   <input
@@ -298,14 +298,14 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                   ROLE
                 </label>
                 <input
                   type="text"
                   defaultValue={user?.role}
                   disabled
-                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm bg-gray-50 text-gray-500"
+                  className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
                 />
               </div>
             </div>

@@ -116,15 +116,15 @@ export default function ContributionsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 dark:bg-gray-950">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
 
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Contributions</h1>
-            <p className="text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Contributions</h1>
+            <p className="text-gray-500 dark:text-gray-400">
               Current Cycle — {contributions.filter(c => c.status === 'CONFIRMED').length}/{contributions.length} Confirmed
             </p>
           </div>
@@ -137,34 +137,34 @@ export default function ContributionsPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-4 shadow-sm border-l-4 border-green-600">
-            <p className="text-gray-500 text-xs">Confirmed</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border-l-4 border-green-600">
+            <p className="text-gray-500 dark:text-gray-400 text-xs">Confirmed</p>
             <p className="text-2xl font-bold text-green-700">
               {contributions.filter(c => c.status === 'CONFIRMED').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border-l-4 border-yellow-500">
-            <p className="text-gray-500 text-xs">Pending</p>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border-l-4 border-yellow-500">
+            <p className="text-gray-500 dark:text-gray-400 text-xs">Pending</p>
             <p className="text-2xl font-bold text-yellow-600">
               {contributions.filter(c => c.status === 'PENDING').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border-l-4 border-red-600">
-            <p className="text-gray-500 text-xs">Overdue</p>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border-l-4 border-red-600">
+            <p className="text-gray-500 dark:text-gray-400 text-xs">Overdue</p>
             <p className="text-2xl font-bold text-red-700">
               {contributions.filter(c => c.status === 'OVERDUE').length}
             </p>
           </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border-l-4 border-blue-600">
-            <p className="text-gray-500 text-xs">Total Collected</p>
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-4 shadow-sm border-l-4 border-blue-600">
+            <p className="text-gray-500 dark:text-gray-400 text-xs">Total Collected</p>
             <p className="text-2xl font-bold text-blue-700">
               {contributions
                 .filter(c => c.status === 'CONFIRMED')
                 .reduce((sum, c) => sum + Number(c.amountXAF), 0)
                 .toLocaleString()}
             </p>
-            <p className="text-xs text-gray-400">XAF</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">XAF</p>
           </div>
         </div>
 
@@ -182,26 +182,26 @@ export default function ContributionsPage() {
         {/* New Contribution Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold text-gray-800">Record Contribution</h2>
-                <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Record Contribution</h2>
+                <button onClick={() => setShowForm(false)} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-xl">✕</button>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-2">AMOUNT (XAF)</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">AMOUNT (XAF)</label>
                   <input
                     type="number"
                     value={formData.amount}
                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                    className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-2">PAYMENT METHOD</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">PAYMENT METHOD</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {[
                       { value: 'MTN_MOMO', label: '📱 MTN MoMo' },
                       { value: 'ORANGE_MONEY', label: '🟠 Orange Money' },
@@ -214,7 +214,7 @@ export default function ContributionsPage() {
                         className={`py-3 rounded-lg text-xs font-medium border-2 transition-colors ${
                           formData.paymentMethod === method.value
                             ? 'border-green-600 bg-green-50 text-green-700'
-                            : 'border-gray-200 text-gray-600'
+                            : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300'
                         }`}
                       >
                         {method.label}
@@ -224,23 +224,23 @@ export default function ContributionsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-2">PAYMENT DATE</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">PAYMENT DATE</label>
                   <input
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                    className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-2">NOTE (OPTIONAL)</label>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">NOTE (OPTIONAL)</label>
                   <input
                     type="text"
                     placeholder="e.g. Transaction ref: ABC123"
                     value={formData.note}
                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
+                    className="w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 text-sm outline-none focus:border-green-500"
                   />
                 </div>
 
@@ -255,7 +255,7 @@ export default function ContributionsPage() {
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="flex-1 border border-gray-300 text-gray-600 py-3 rounded-lg hover:bg-gray-50"
+                    className="flex-1 border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
                     Cancel
                   </button>
@@ -266,38 +266,38 @@ export default function ContributionsPage() {
         )}
 
         {/* Contributions Table */}
-        <div className="bg-white rounded-xl shadow-sm">
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-lg font-bold text-gray-800">All Contributions</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm">
+          <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">All Contributions</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">MEMBER ID</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">AMOUNT</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">METHOD</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">DATE</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">STATUS</th>
-                  <th className="text-left p-4 text-xs text-gray-500 font-semibold">ACTION</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">MEMBER ID</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">AMOUNT</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">METHOD</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">DATE</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">STATUS</th>
+                  <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400 font-semibold">ACTION</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {contributions.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-gray-400">
+                    <td colSpan={6} className="p-8 text-center text-gray-400 dark:text-gray-500">
                       No contributions yet. Click &quot;+ New Contribution&quot; to add one.
                     </td>
                   </tr>
                 ) : (
                   contributions.map((c) => (
-                    <tr key={c.id} className="hover:bg-gray-50">
-                      <td className="p-4 text-sm text-gray-600">{c.memberId.slice(0, 8)}...</td>
-                      <td className="p-4 text-sm font-semibold text-gray-800">
+                    <tr key={c.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">{c.memberId.slice(0, 8)}...</td>
+                      <td className="p-4 text-sm font-semibold text-gray-800 dark:text-gray-100">
                         {Number(c.amountXAF).toLocaleString()} XAF
                       </td>
-                      <td className="p-4 text-sm text-gray-600">{c.paymentMethod}</td>
-                      <td className="p-4 text-sm text-gray-600">
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">{c.paymentMethod}</td>
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">
                         {new Date(c.paymentDate).toLocaleDateString()}
                       </td>
                       <td className="p-4">
@@ -319,7 +319,7 @@ export default function ContributionsPage() {
                           </button>
                         )}
                         {c.status === 'CONFIRMED' && (
-                          <span className="text-xs text-gray-400">Verified ✅</span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500">Verified ✅</span>
                         )}
                       </td>
                     </tr>

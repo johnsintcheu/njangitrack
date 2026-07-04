@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+/* Enable class-based dark mode (Tailwind v4 CSS-first config).
+   Toggling the `dark` class on <html> (see lib/theme.tsx) switches
+   every `dark:` utility in the app. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
