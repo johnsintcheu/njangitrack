@@ -4,6 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoanModule } from './loan/loan.module';
 import { LoanInterestAccrualAgent } from './agents/loan-interest-accrual.agent';
+import { AgentsController } from './agents/agents.controller';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { LoanInterestAccrualAgent } from './agents/loan-interest-accrual.agent';
     PrismaModule,
     LoanModule,
   ],
+  controllers: [AgentsController],
   providers: [LoanInterestAccrualAgent],
 })
 export class AppModule {}

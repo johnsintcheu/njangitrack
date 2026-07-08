@@ -15,6 +15,7 @@ export class ContributionController {
       paymentMethod: string;
       paymentDate: Date;
       note?: string;
+      payerPhone?: string;
     },
   ) {
     return this.contributionService.recordContribution(body);

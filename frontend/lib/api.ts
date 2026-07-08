@@ -34,11 +34,11 @@ const createApi = (baseURL: string) => {
   return api
 }
 
-export const identityApi = createApi('https://identity-service-xtv7.onrender.com')
-export const ledgerApi = createApi('https://ledger-service-jdcq.onrender.com')
-export const fineApi = createApi('https://fine-service.onrender.com')
-export const loanApi = createApi('https://loan-service-1bhi.onrender.com')
-export const notificationApi = createApi('https://notification-service-521i.onrender.com')
+export const identityApi = createApi(process.env.NEXT_PUBLIC_API_URL || 'https://identity-service-xtv7.onrender.com')
+export const ledgerApi = createApi(process.env.NEXT_PUBLIC_LEDGER_URL || 'https://ledger-service-jdcq.onrender.com')
+export const fineApi = createApi(process.env.NEXT_PUBLIC_FINE_URL || 'https://fine-service.onrender.com')
+export const loanApi = createApi(process.env.NEXT_PUBLIC_LOAN_URL || 'https://loan-service-1bhi.onrender.com')
+export const notificationApi = createApi(process.env.NEXT_PUBLIC_NOTIFICATION_URL || 'https://notification-service-521i.onrender.com')
 
 // Reports (cycle summary reports) are stored by the Ledger service.
 // Requires a `ReportsModule` on the backend — see BACKEND_TODO.md.

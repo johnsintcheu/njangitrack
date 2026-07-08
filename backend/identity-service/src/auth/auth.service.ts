@@ -17,6 +17,7 @@ export class AuthService {
     password: string;
     language?: string;
     quartier?: string;
+    role?: 'MEMBER' | 'TREASURER' | 'GROUP_ADMIN';
   }) {
     const existing = await this.prisma.user.findUnique({
       where: { phoneNumber: data.phoneNumber },
@@ -36,6 +37,7 @@ export class AuthService {
         passwordHash,
         language: data.language || 'fr',
         quartier: data.quartier,
+        role: data.role || 'MEMBER',
       },
     });
 

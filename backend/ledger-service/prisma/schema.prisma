@@ -40,6 +40,15 @@ model Contribution {
   cycle         Cycle              @relation(fields: [cycleId], references: [id])
 }
 
+model AgentRunLog {
+  id                       String   @id @default(uuid())
+  agentName                String   @unique
+  lastRunAt                DateTime
+  lastRunDurationMs        Int
+  lastRunRecordsProcessed  Int
+  status                   String
+}
+
 model AuditLog {
   id               String   @id @default(uuid())
   entityType       String
@@ -51,6 +60,24 @@ model AuditLog {
   actorType        String
   ipAddress        String?
   timestampUTC     DateTime @default(now())
+}
+
+model SessionReport {
+  id                     String   @id @default(uuid())
+  groupId                String
+  title                  String
+  cycleId                String?
+  meetingDate            DateTime
+  authorId               String
+  authorName             String
+  summary                String
+  contributionsTotalXAF  Int
+  finesTotalXAF          Int
+  socialFundBalanceXAF   Int
+  beneficiaryName        String?
+  attendeesCount         Int
+  decisions              String?
+  createdAt              DateTime @default(now())
 }
 
 enum CycleStatus {

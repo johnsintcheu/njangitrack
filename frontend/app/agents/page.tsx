@@ -8,10 +8,11 @@ import type { AgentStatus } from '@/types'
 
 const EXPECTED_AGENTS = [
   { agentName: 'Payment Verification Agent', service: 'Ledger Service', schedule: 'Webhook-driven (MoMo/Orange Money)' },
-  { agentName: 'Contribution Monitor Agent', service: 'Fine Service', schedule: 'Every 1 minute' },
   { agentName: 'Payout Readiness Agent', service: 'Ledger Service', schedule: 'Every 1 minute' },
+  { agentName: 'Contribution Monitor Agent', service: 'Fine Service', schedule: 'Every 1 minute' },
   { agentName: 'Loan Interest Accrual Agent', service: 'Loan Service', schedule: 'Daily at midnight' },
-  { agentName: 'Notification Scheduler Agent', service: 'Notification Service', schedule: 'Hourly + 30-min retry' },
+  { agentName: 'Notification Scheduler Agent', service: 'Notification Service', schedule: 'Hourly' },
+  { agentName: 'Notification Retry Agent', service: 'Notification Service', schedule: 'Every 30 minutes' },
 ]
 
 function relativeTime(iso: string | null) {

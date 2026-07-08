@@ -28,6 +28,7 @@ export default function ContributionsPage() {
     paymentMethod: 'MTN_MOMO',
     date: new Date().toISOString().split('T')[0],
     note: '',
+    payerPhone: '',
   })
 
   useEffect(() => {
@@ -74,21 +75,34 @@ export default function ContributionsPage() {
     }
   }
 
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setPaymentStatus(null)
 
     try {
-      await ledgerApi.post('/contributions', {
+      const payload: Record<string, any> = {
         cycleId: cycleId,
         memberId: user?.id || 'unknown',
         amountXAF: parseInt(formData.amount),
         paymentMethod: formData.paymentMethod,
         paymentDate: new Date(formData.date).toISOString(),
         note: formData.note,
-      })
+      }
+      if (formData.paymentMethod !== 'CASH' && formData.payerPhone) {
+        payload.payerPhone = `+237${formData.payerPhone}`
+      }
+
+      await ledgerApi.post('/contributions', payload)
 
       setSubmitted(true)
+      setPaymentStatus(
+        formData.paymentMethod === 'CASH'
+          ? 'Contribution recorded! Treasurer will verify.'
+          : 'Payment initiated via ' + formData.paymentMethod + '. You will receive a payment request on your phone.'
+      )
       setShowForm(false)
       loadContributions(cycleId)
       setFormData({
@@ -96,6 +110,7 @@ export default function ContributionsPage() {
         paymentMethod: 'MTN_MOMO',
         date: new Date().toISOString().split('T')[0],
         note: '',
+        payerPhone: '',
       })
     } catch {
       alert('Failed to submit contribution. Please try again.')
@@ -170,11 +185,11 @@ export default function ContributionsPage() {
 
         {/* Success Message */}
         {submitted && (
-          <div className="bg-green-50 border border-green-200 text-green-700 rounded-lg p-4 mb-6 flex items-center gap-2">
+          <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 rounded-lg p-4 mb-6 flex items-center gap-2">
             <span>✅</span>
             <div>
               <p className="font-semibold text-sm">Contribution submitted successfully!</p>
-              <p className="text-xs">Status: PENDING — Treasurer will verify within 24 hours.</p>
+              <p className="text-xs">{paymentStatus || 'Status: PENDING'}</p>
             </div>
           </div>
         )}

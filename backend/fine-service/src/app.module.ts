@@ -4,6 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from './prisma/prisma.module';
 import { FineModule } from './fine/fine.module';
 import { ContributionMonitorAgent } from './agents/contribution-monitor.agent';
+import { AgentsController } from './agents/agents.controller';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ContributionMonitorAgent } from './agents/contribution-monitor.agent';
     PrismaModule,
     FineModule,
   ],
+  controllers: [AgentsController],
   providers: [ContributionMonitorAgent],
 })
 export class AppModule {}

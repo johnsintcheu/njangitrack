@@ -15,6 +15,7 @@ export class AuthController {
       password: string;
       language?: string;
       quartier?: string;
+      role?: 'MEMBER' | 'TREASURER' | 'GROUP_ADMIN';
     },
   ) {
     return this.authService.register(body);

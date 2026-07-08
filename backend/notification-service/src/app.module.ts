@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { NotificationModule } from './notification/notification.module';
 import { NotificationSchedulerAgent } from './agents/notification-scheduler.agent';
 import { NotificationService } from './notification/notification.service';
+import { AgentsController } from './agents/agents.controller';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { NotificationService } from './notification/notification.service';
     PrismaModule,
     NotificationModule,
   ],
+  controllers: [AgentsController],
   providers: [NotificationSchedulerAgent, NotificationService],
 })
 export class AppModule {}

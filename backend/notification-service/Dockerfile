@@ -3,9 +3,11 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-COPY node_modules ./node_modules
+RUN npm install
+
 COPY . .
 
+RUN npx prisma generate
 RUN npx nest build
 
 EXPOSE 3005

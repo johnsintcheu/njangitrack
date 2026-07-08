@@ -14,40 +14,112 @@ export class NotificationSchedulerAgent {
 
   @Cron(CronExpression.EVERY_HOUR)
   async sendScheduledReminders() {
+    const start = Date.now();
     this.logger.log('🤖 Notification Scheduler Agent running...');
 
-    const pending = await this.prisma.notification.findMany({
-      where: { deliveryStatus: 'PENDING' },
-    });
-
-    if (pending.length === 0) {
-      this.logger.log('✅ No pending notifications at this time.');
-      return;
-    }
-
-    this.logger.log(`📨 Processing ${pending.length} pending notifications...`);
-
-    for (const notification of pending) {
-      await this.prisma.notification.update({
-        where: { id: notification.id },
-        data: {
-          deliveryStatus: 'SENT',
-          sentAt: new Date(),
-        },
+    let processed = 0;
+    try {
+      const pending = await this.prisma.notification.findMany({
+        where: { deliveryStatus: 'PENDING' },
       });
 
-      this.logger.log(
-        `✅ Notification sent to ${notification.recipientId} via ${notification.channel}`,
-      );
+      if (pending.length === 0) {
+        this.logger.log('✅ No pending notifications at this time.');
+      } else {
+        this.logger.log(`📨 Processing ${pending.length} pending notifications...`);
+
+        for (const notification of pending) {
+          await this.prisma.notification.update({
+            where: { id: notification.id },
+            data: {
+              deliveryStatus: 'SENT',
+              sentAt: new Date(),
+            },
+          });
+          processed++;
+        }
+      }
+
+      await this.prisma.agentRunLog.upsert({
+        where: { agentName: 'Notification Scheduler Agent' },
+        update: {
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: processed,
+          status: 'HEALTHY',
+        },
+        create: {
+          agentName: 'Notification Scheduler Agent',
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: processed,
+          status: 'HEALTHY',
+        },
+      });
+    } catch (e) {
+      this.logger.error('❌ Notification Scheduler Agent error', e);
+      await this.prisma.agentRunLog.upsert({
+        where: { agentName: 'Notification Scheduler Agent' },
+        update: {
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          status: 'ERROR',
+        },
+        create: {
+          agentName: 'Notification Scheduler Agent',
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: 0,
+          status: 'ERROR',
+        },
+      });
     }
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
   async retryFailedNotifications() {
+    const start = Date.now();
     this.logger.log('🔄 Retrying failed notifications...');
-    const count = await this.notificationService.retryFailedNotifications();
-    if (count > 0) {
-      this.logger.log(`🔄 Retried ${count} failed notifications`);
+    let processed = 0;
+    try {
+      const count = await this.notificationService.retryFailedNotifications();
+      processed = count;
+      if (count > 0) {
+        this.logger.log(`🔄 Retried ${count} failed notifications`);
+      }
+      await this.prisma.agentRunLog.upsert({
+        where: { agentName: 'Notification Retry Agent' },
+        update: {
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: processed,
+          status: 'HEALTHY',
+        },
+        create: {
+          agentName: 'Notification Retry Agent',
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: processed,
+          status: 'HEALTHY',
+        },
+      });
+    } catch (e) {
+      this.logger.error('❌ Notification Retry Agent error', e);
+      await this.prisma.agentRunLog.upsert({
+        where: { agentName: 'Notification Retry Agent' },
+        update: {
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          status: 'ERROR',
+        },
+        create: {
+          agentName: 'Notification Retry Agent',
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: 0,
+          status: 'ERROR',
+        },
+      });
     }
   }
 

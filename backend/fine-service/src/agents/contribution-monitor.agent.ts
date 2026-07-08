@@ -10,25 +10,64 @@ export class ContributionMonitorAgent {
 
   @Cron(CronExpression.EVERY_MINUTE)
   async monitorContributions() {
+    const start = Date.now();
     this.logger.log('🤖 Contribution Monitor Agent running...');
 
-    const pendingFines = await this.prisma.fine.findMany({
-      where: { status: 'OUTSTANDING' },
-    });
+    let processed = 0;
+    try {
+      const pendingFines = await this.prisma.fine.findMany({
+        where: { status: 'OUTSTANDING' },
+      });
 
-    if (pendingFines.length === 0) {
-      this.logger.log('✅ No outstanding fines at this time.');
-      return;
-    }
+      processed = pendingFines.length;
 
-    this.logger.log(
-      `⚠️  Found ${pendingFines.length} outstanding fines.`,
-    );
+      if (pendingFines.length === 0) {
+        this.logger.log('✅ No outstanding fines at this time.');
+      } else {
+        this.logger.log(
+          `⚠️  Found ${pendingFines.length} outstanding fines.`,
+        );
 
-    for (const fine of pendingFines) {
-      this.logger.log(
-        `📋 Fine ${fine.id} — Member: ${fine.memberId} — Amount: ${fine.amountXAF} XAF — Reason: ${fine.reason}`,
-      );
+        for (const fine of pendingFines) {
+          this.logger.log(
+            `📋 Fine ${fine.id} — Member: ${fine.memberId} — Amount: ${fine.amountXAF} XAF — Reason: ${fine.reason}`,
+          );
+        }
+      }
+
+      await this.prisma.agentRunLog.upsert({
+        where: { agentName: 'Contribution Monitor Agent' },
+        update: {
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: processed,
+          status: 'HEALTHY',
+        },
+        create: {
+          agentName: 'Contribution Monitor Agent',
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: processed,
+          status: 'HEALTHY',
+        },
+      });
+    } catch (e) {
+      this.logger.error('❌ Contribution Monitor Agent error', e);
+      await this.prisma.agentRunLog.upsert({
+        where: { agentName: 'Contribution Monitor Agent' },
+        update: {
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          status: 'ERROR',
+        },
+        create: {
+          agentName: 'Contribution Monitor Agent',
+          lastRunAt: new Date(),
+          lastRunDurationMs: Date.now() - start,
+          lastRunRecordsProcessed: 0,
+          status: 'ERROR',
+        },
+      });
     }
   }
 

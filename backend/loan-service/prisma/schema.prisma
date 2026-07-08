@@ -31,6 +31,15 @@ model Repayment {
   loan        Loan     @relation(fields: [loanId], references: [id])
 }
 
+model AgentRunLog {
+  id                       String   @id @default(uuid())
+  agentName                String   @unique
+  lastRunAt                DateTime
+  lastRunDurationMs        Int
+  lastRunRecordsProcessed  Int
+  status                   String
+}
+
 model AuditLog {
   id            String   @id @default(uuid())
   entityType    String

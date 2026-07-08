@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { PaymentService } from '../payment/payment.service';
 
 @Injectable()
 export class ContributionService {
-  constructor(private prisma: PrismaService) {}
+  private readonly logger = new Logger(ContributionService.name);
+
+  constructor(
+    private prisma: PrismaService,
+    private paymentService: PaymentService,
+  ) {}
 
   async recordContribution(data: {
     cycleId: string;
@@ -12,6 +18,7 @@ export class ContributionService {
     paymentMethod: string;
     paymentDate: Date;
     note?: string;
+    payerPhone?: string;
   }) {
     const contribution = await this.prisma.contribution.create({
       data: {
@@ -35,6 +42,19 @@ export class ContributionService {
         actorType: 'HUMAN',
       },
     });
+
+    if (data.paymentMethod === 'MTN_MOMO' || data.paymentMethod === 'ORANGE_MONEY') {
+      const phone = data.payerPhone || '';
+      if (phone) {
+        this.logger.log(`📱 Initiating ${data.paymentMethod} payment for ${phone}...`);
+        await this.paymentService.initiatePayment({
+          contributionId: contribution.id,
+          amount: data.amountXAF,
+          payerPhone: phone,
+          paymentMethod: data.paymentMethod,
+        });
+      }
+    }
 
     return contribution;
   }
