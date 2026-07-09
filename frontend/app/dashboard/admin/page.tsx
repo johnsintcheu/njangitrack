@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/store'
 import Sidebar from '@/components/layout/Sidebar'
 import { identityApi, ledgerApi, fineApi, loanApi } from '@/lib/api'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Users, RefreshCw } from 'lucide-react'
 
 interface Cycle {
   id: string
@@ -33,6 +33,17 @@ interface Member {
   role: string
 }
 
+interface Group {
+  id: string
+  name: string
+  contributionAmount: number
+  frequency: string
+  startDate: string
+  maxMembers: number
+  adminId: string
+  createdAt: string
+}
+
 export default function AdminDashboard() {
   const { isLoggedIn, user } = useAuthStore()
   const router = useRouter()
@@ -44,6 +55,8 @@ export default function AdminDashboard() {
   const [loanBalance, setLoanBalance] = useState(0)
   const [members, setMembers] = useState<Member[]>([])
   const [memberStatus, setMemberStatus] = useState<Record<string, string>>({})
+  const [groups, setGroups] = useState<Group[]>([])
+  const [loadingGroups, setLoadingGroups] = useState(true)
 
   const [showModal, setShowModal] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -62,7 +75,20 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadDashboard()
+    loadGroups()
   }, [])
+
+  const loadGroups = async () => {
+    setLoadingGroups(true)
+    try {
+      const res = await identityApi.get('/groups')
+      setGroups(res.data)
+    } catch {
+      setGroups([])
+    } finally {
+      setLoadingGroups(false)
+    }
+  }
 
   const loadDashboard = async () => {
     setLoading(true)
@@ -121,13 +147,14 @@ export default function AdminDashboard() {
         name: groupForm.name,
         contributionAmount: Number(groupForm.contributionAmount),
         frequency: groupForm.frequency,
-        startDate: groupForm.startDate,
+        startDate: new Date(groupForm.startDate).toISOString(),
       })
       setCreateSuccess('Group created successfully!')
       setGroupForm({ name: '', contributionAmount: '', frequency: 'MONTHLY', startDate: '' })
       setTimeout(() => {
         setShowModal(false)
         setCreateSuccess('')
+        loadGroups()
         loadDashboard()
       }, 2000)
     } catch (err: any) {
@@ -205,6 +232,75 @@ export default function AdminDashboard() {
               </div>
             </div>
 
+            {/* Groups List */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm mb-8">
+              <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">
+                  Groups ({groups.length})
+                </h2>
+                <button
+                  onClick={loadGroups}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                >
+                  <RefreshCw size={16} />
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-800">
+                    <tr>
+                      <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400">NAME</th>
+                      <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400">CONTRIBUTION</th>
+                      <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400">FREQUENCY</th>
+                      <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400">START DATE</th>
+                      <th className="text-left p-4 text-xs text-gray-500 dark:text-gray-400">MAX MEMBERS</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                    {loadingGroups ? (
+                      <tr>
+                        <td colSpan={5} className="p-8 text-center text-gray-400">Loading groups...</td>
+                      </tr>
+                    ) : groups.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="p-8 text-center text-gray-400">
+                          No groups yet. Click "Create Group" to add one.
+                        </td>
+                      </tr>
+                    ) : (
+                      groups.map((group) => (
+                        <tr key={group.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                          <td className="p-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center">
+                                <Users size={14} className="text-green-700 dark:text-green-300" />
+                              </div>
+                              <span className="font-medium text-gray-800 dark:text-gray-100 text-sm">{group.name}</span>
+                            </div>
+                          </td>
+                          <td className="p-4 text-sm font-semibold text-green-700 dark:text-green-400">
+                            {Number(group.contributionAmount).toLocaleString()} XAF
+                          </td>
+                          <td className="p-4">
+                            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+                              {group.frequency}
+                            </span>
+                          </td>
+                          <td className="p-4 text-sm text-gray-600 dark:text-gray-300">
+                            {new Date(group.startDate).toLocaleDateString()}
+                          </td>
+                          <td className="p-4 text-sm text-gray-600 dark:text-gray-300">
+                            {group.maxMembers}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Members Table */}
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm">
               <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Members</h2>
@@ -222,7 +318,7 @@ export default function AdminDashboard() {
                     {members.length === 0 ? (
                       <tr>
                         <td colSpan={3} className="p-8 text-center text-gray-400">
-                          No members found yet. Invite members from the Members page.
+                          No members found yet.
                         </td>
                       </tr>
                     ) : (
