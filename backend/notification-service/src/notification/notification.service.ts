@@ -4,14 +4,39 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class NotificationService {
   private readonly logger = new Logger(NotificationService.name);
+  private africastalking: any;
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {
+    this.initAfricasTalking();
+  }
+
+  private initAfricasTalking() {
+    try {
+      const AT_API_KEY = process.env.AT_API_KEY;
+      const AT_USERNAME = process.env.AT_USERNAME || 'sandbox';
+
+      if (AT_API_KEY) {
+        const AfricasTalking = require('africastalking');
+        const at = AfricasTalking({
+          apiKey: AT_API_KEY,
+          username: AT_USERNAME,
+        });
+        this.africastalking = at.SMS;
+        this.logger.log('✅ Africa\'s Talking SMS initialized');
+      } else {
+        this.logger.warn('⚠️  AT_API_KEY not set — running in simulation mode');
+      }
+    } catch (e) {
+      this.logger.warn('⚠️  Africa\'s Talking not available — simulation mode');
+    }
+  }
 
   async sendNotification(data: {
     recipientId: string;
     type: string;
     channel: 'SMS' | 'PUSH';
     messageContent: string;
+    phoneNumber?: string;
   }) {
     const notification = await this.prisma.notification.create({
       data: {
@@ -27,15 +52,36 @@ export class NotificationService {
       `📨 Sending ${data.channel} to member ${data.recipientId}: ${data.messageContent}`,
     );
 
-    await this.prisma.notification.update({
-      where: { id: notification.id },
-      data: {
-        deliveryStatus: 'SENT',
-        sentAt: new Date(),
-      },
-    });
+    try {
+      if (data.channel === 'SMS' && this.africastalking && data.phoneNumber) {
+        // Send real SMS via Africa's Talking
+        await this.africastalking.send({
+          to: [data.phoneNumber],
+          message: data.messageContent,
+          from: process.env.AT_SENDER_ID || 'NjangiTrack',
+        });
+        this.logger.log(`📱 Real SMS sent to ${data.phoneNumber}`);
+      } else {
+        // Simulation mode
+        this.logger.log(`🔄 Simulation: SMS would be sent to member ${data.recipientId}`);
+      }
 
-    this.logger.log(`✅ Notification sent successfully to ${data.recipientId}`);
+      await this.prisma.notification.update({
+        where: { id: notification.id },
+        data: {
+          deliveryStatus: 'SENT',
+          sentAt: new Date(),
+        },
+      });
+
+      this.logger.log(`✅ Notification sent successfully to ${data.recipientId}`);
+    } catch (e) {
+      this.logger.error(`❌ Failed to send notification: ${e.message}`);
+      await this.prisma.notification.update({
+        where: { id: notification.id },
+        data: { deliveryStatus: 'FAILED' },
+      });
+    }
 
     return notification;
   }
@@ -54,7 +100,6 @@ export class NotificationService {
 
     for (const notification of failed) {
       this.logger.log(`🔄 Retrying notification ${notification.id}...`);
-
       await this.prisma.notification.update({
         where: { id: notification.id },
         data: {
